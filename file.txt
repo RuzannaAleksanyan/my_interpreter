@@ -5,7 +5,7 @@ int main() {
     int y = 8;
     if ( s < y ) {
         s += 4;
-        // int y;
+        int y;
     }
     double sh = 8;
 }

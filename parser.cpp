@@ -92,7 +92,6 @@ void Parser::make_the_body(std::vector<std::string>& if_block_lines) {
     for(auto line : if_block_lines) {
         // skip empty lines
         if (line.empty()) {
-            // ++address;
             continue;
         }
 
@@ -124,7 +123,6 @@ void Parser::make_the_body(std::vector<std::string>& if_block_lines) {
         }
 
         if(tokens.size() == 1 && tokens[0] == "std::cin") {
-            // ++address;
             tokens.clear();
             continue;
         }
@@ -140,7 +138,6 @@ void Parser::make_the_body(std::vector<std::string>& if_block_lines) {
         }
 
         if(tokens.size() == 1 && tokens[0] == "std::cout") {
-            // ++address;
             tokens.clear();
             continue;
         }
@@ -151,7 +148,6 @@ void Parser::make_the_body(std::vector<std::string>& if_block_lines) {
         }
 
         tokens.clear();
-
     }
 }
 
@@ -222,6 +218,36 @@ void Parser::parse() {
             ++address;
             continue;
         }
+
+        // if(tokens[0] == "while" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
+        //     if(condition_check(tokens)) {
+        //         std::vector<std::string> while_block_lines;
+
+        //         ++address;
+        //         while(line_map[address] != "}") {
+        //             while_block_lines.push_back(line_map[address]);
+        //             ++address;
+        //         }
+
+        //         // while() {
+        //         //     make_the_body(if_block_lines);
+        //         // }                
+
+        //         tokens.clear();
+        //         ++address;
+        //         continue;
+        //     }
+
+        //     while(line_map[address] != "}") {
+        //         ++address;
+        //     }
+
+        //     tokens.clear();
+        //     ++address;
+        //     continue;
+        // }
+
+
 
         lack_of_a_comma(line);
         tokens[tokens.size() - 1].pop_back();
