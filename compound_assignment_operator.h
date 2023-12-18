@@ -10,7 +10,7 @@ public:
     void handle_plus_equal(std::unordered_map<std::string, T>& variable_map,
                             std::unordered_map<std::string, F>& operand_map, 
                             const std::string& variable, 
-                            const std::string& operand) {
+                            const std::string& operand) noexcept {
         if (variable_map.find(variable) != variable_map.end() && operand_map.find(operand) != operand_map.end()) {
             T& x = variable_map[variable]; 
             const T& y = operand_map[operand];
@@ -25,7 +25,7 @@ public:
     void handle_minus_equal(std::unordered_map<std::string, T>& variable_map,
                             std::unordered_map<std::string, F>& operand_map, 
                             const std::string& variable, 
-                            const std::string& operand) {
+                            const std::string& operand) noexcept {
         if (variable_map.find(variable) != variable_map.end() && operand_map.find(operand) != operand_map.end()) {
             T& x = variable_map[variable];
             const T& y = operand_map[operand];
@@ -40,7 +40,7 @@ public:
     void handle_multiply_equal(std::unordered_map<std::string, T>& variable_map,
                             std::unordered_map<std::string, F>& operand_map, 
                             const std::string& variable, 
-                            const std::string& operand) {
+                            const std::string& operand) noexcept {
         if (variable_map.find(variable) != variable_map.end() && operand_map.find(operand) != operand_map.end()) {
             T& x = variable_map[variable];   
             const T& y = operand_map[operand];
@@ -55,7 +55,7 @@ public:
     void handle_divide_equal(std::unordered_map<std::string, T>& variable_map,
                             std::unordered_map<std::string, F>& operand_map, 
                             const std::string& variable, 
-                            const std::string& operand) {
+                            const std::string& operand) noexcept {
         if (variable_map.find(variable) != variable_map.end() && operand_map.find(operand) != operand_map.end()) {
             T& x = variable_map[variable];
             const T& y = operand_map[operand];
@@ -73,7 +73,7 @@ public:
     void handle_assignment(std::unordered_map<std::string, T>& variable_map,
                             std::unordered_map<std::string, F>& operand_map, 
                             const std::string& variable, 
-                            const std::string& operand) {
+                            const std::string& operand) noexcept {
         if (variable_map.find(variable) != variable_map.end() && operand_map.find(operand) != operand_map.end()) {
             T& x = variable_map[variable];
             const T& y = operand_map[operand]; 
@@ -90,7 +90,7 @@ public:
             std::unordered_map<std::string, F>& operand_map,
             const std::string& variable,
             const std::string& operand,
-            const std::string& assignment) {
+            const std::string& assignment) noexcept {
         if (variable_map.find(variable) != variable_map.end() && operand_map.find(operand) != operand_map.end()) {
             if (assignment == "+=") {
                 handle_plus_equal<T>(variable_map, operand_map, variable, operand);
@@ -113,7 +113,7 @@ public:
                             std::unordered_map<std::string, T>& variable_map, 
                             const std::string& variable, 
                             const std::string& assignment,
-                            T& operand) {
+                            T& operand) noexcept {
         if(assignment == "+=") {
             variable_map[variable] += operand;
         } else if(assignment == "-=") {

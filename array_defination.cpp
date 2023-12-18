@@ -2,7 +2,7 @@
 
 #include <regex>
 
-std::string Parser::extract_content_in_brackets(const std::string& inputString) {
+std::string Parser::extract_content_in_brackets(const std::string& inputString) noexcept {
     std::regex pattern(R"(\[(.*?)\])");
     std::smatch match;
 
@@ -13,7 +13,7 @@ std::string Parser::extract_content_in_brackets(const std::string& inputString) 
     }
 }
 
-std::string Parser::extract_string_before_bracket(const std::string& inputString) {
+std::string Parser::extract_string_before_bracket(const std::string& inputString) noexcept {
     size_t bracketPos = inputString.find('[');
 
     if (bracketPos != std::string::npos) {

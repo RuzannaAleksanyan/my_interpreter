@@ -1,42 +1,42 @@
 #include "parser.h"
 
-void Parser::print_int() {
+void Parser::print_int() noexcept {
     for(const auto& map : int_variables) {
         std::cout << map.first << " " << map.second << std::endl;
     }
 }
 
-void Parser::print_char() {
+void Parser::print_char() noexcept {
     for(const auto& map : char_variables) {
         std::cout << map.first << " " << map.second << std::endl;
     }
 }
 
-void Parser::print_float() {
+void Parser::print_float() noexcept {
     for(const auto& map : float_variables) {
         std::cout << map.first << " " << map.second << std::endl;
     }
 }
 
-void Parser::print_double() {
+void Parser::print_double() noexcept {
     for(const auto& map : double_variables) {
         std::cout << map.first << " " << map.second << std::endl;
     }
 }
 
-void Parser::print_bool() {
+void Parser::print_bool() noexcept {
     for(const auto& map : bool_variables) {
         std::cout << map.first << " " << map.second << std::endl;
     }
 }
 
-void Parser::print_string() {
+void Parser::print_string() noexcept {
     for(const auto& map : string_variables) {
         std::cout << map.first << " " << map.second << std::endl;
     }
 }
 
-void Parser::print_include() {
+void Parser::print_include() noexcept {
     for(const auto& map : include_vector) {
         std::cout << map << std::endl;
     }

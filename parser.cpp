@@ -9,7 +9,7 @@
 Parser::Parser(const std::string& filename) : m_filename{filename}
 { }
 
-bool Parser::has_main_function(const std::string& code) {
+bool Parser::has_main_function(const std::string& code) noexcept {
     std::regex mainRegex(R"(\bint\s+main\s*\(\s*\)\s*\{)");
 
     return std::regex_search(code, mainRegex);
@@ -23,7 +23,7 @@ std::string Parser::remove_comments(const std::string& code) {
     return std::regex_replace(code, commentRegex, "");
 }
 
-bool Parser::has_ordered_brackets(const std::string& input_string) {
+bool Parser::has_ordered_brackets(const std::string& input_string) noexcept {
     if (input_string.empty() || input_string.back() != ']') {
         return false;
     }
@@ -37,7 +37,7 @@ bool Parser::has_ordered_brackets(const std::string& input_string) {
     return false;
 }
 
-std::vector<std::string> Parser::tokenize_line(const std::string& line) {
+std::vector<std::string> Parser::tokenize_line(const std::string& line) noexcept {
     std::vector<std::string> tokens;
 
     std::istringstream iss(line);  // Create a string stream from the line
@@ -302,7 +302,7 @@ void Parser::parse() {
     }
 }
 
-bool Parser::contains_if_condition(const std::string& line) {
+bool Parser::contains_if_condition(const std::string& line) noexcept {
     // Regular expression to match an 'if' statement with any condition
     std::regex if_regex(R"(if\s*\(.+\)\s*\{)");
 

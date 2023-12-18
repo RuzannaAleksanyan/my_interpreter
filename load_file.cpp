@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-std::string Parser::trim(const std::string& str) {
+std::string Parser::trim(const std::string& str) noexcept {
     size_t start = str.find_first_not_of(" \t\n\r");
     if (start == std::string::npos) {
         return "The string contains only whitespace";  // The string contains only whitespace
