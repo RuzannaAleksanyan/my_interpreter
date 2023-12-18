@@ -1,0 +1,10 @@
+#include <iostream>
+#include <vector>
+int main() {
+    int s = 5;
+    int y = 8;
+    if ( s < y ) {
+
+    }
+    double sh = 8;
+}
