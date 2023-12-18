@@ -5,7 +5,10 @@ int main() {
     int y = 8;
     if ( s < y ) {
         s += 4;
-        int y;
+        std::cin >> s;
+    }
+    while ( s < 1 ) {
+        y = 55;
     }
     double sh = 8;
 }

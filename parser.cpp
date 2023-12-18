@@ -219,33 +219,43 @@ void Parser::parse() {
             continue;
         }
 
-        // if(tokens[0] == "while" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
-        //     if(condition_check(tokens)) {
-        //         std::vector<std::string> while_block_lines;
+        if(tokens[0] == "while" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
+            auto op1 = get_variable_value(tokens[2]);
+            auto op2 = get_variable_value(tokens[4]);
 
-        //         ++address;
-        //         while(line_map[address] != "}") {
-        //             while_block_lines.push_back(line_map[address]);
-        //             ++address;
-        //         }
+            std::size_t address_while = address;
 
-        //         // while() {
-        //         //     make_the_body(if_block_lines);
-        //         // }                
+            if(perform_comparison(tokens[3], op1, op2)) {
+                while(perform_comparison(tokens[3], op1, op2)) {
+                    std::vector<std::string> while_block_lines;
 
-        //         tokens.clear();
-        //         ++address;
-        //         continue;
-        //     }
+                    ++address;
+                    while(line_map[address] != "}") {
+                        while_block_lines.push_back(line_map[address]);
+                        ++address;
+                    }
 
-        //     while(line_map[address] != "}") {
-        //         ++address;
-        //     }
+                    op1 = get_variable_value(tokens[2]);
+                    op2 = get_variable_value(tokens[4]); 
+                    
+                    make_the_body(while_block_lines);
+                    
+                    address = address_while;
+                }                
 
-        //     tokens.clear();
-        //     ++address;
-        //     continue;
-        // }
+                tokens.clear();
+                ++address;
+                continue;
+            }
+
+            while(line_map[address] != "}") {
+                ++address;
+            }
+
+            tokens.clear();
+            ++address;
+            continue;
+        }
 
 
 
