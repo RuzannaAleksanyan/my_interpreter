@@ -37,6 +37,124 @@ bool Parser::has_ordered_brackets(const std::string& input_string) {
     return false;
 }
 
+std::vector<std::string> Parser::tokenize_line(const std::string& line) {
+    std::vector<std::string> tokens;
+
+    std::istringstream iss(line);  // Create a string stream from the line
+    std::string token;
+
+    while (iss >> token) {
+        tokens.push_back(token);  // Store each token in the vector
+    }
+
+    return tokens;
+}
+
+void Parser::handle_variable_declaration(std::vector<std::string>& tokens) {
+    if(tokens.size() != 1 && tokens[0] == "int") { 
+        if(has_ordered_brackets(tokens[1])) {
+            int_array_declaration(tokens);
+        } else {
+            int_variable_declaration(tokens);
+        }
+    } else if(tokens.size() != 1 && tokens[0] == "char") {
+        if(has_ordered_brackets(tokens[1])) {
+            char_array_declaration(tokens);
+        } else {
+            char_variable_declaration(tokens);
+        }
+    } else if(tokens.size() != 1 && tokens[0] == "bool") {
+        if(has_ordered_brackets(tokens[1])) {
+            bool_array_declaration(tokens);
+        } else {
+            bool_variable_declaration(tokens);
+        }
+    } else if(tokens.size() != 1 && tokens[0] == "float") {
+        if(has_ordered_brackets(tokens[1])) {
+            float_array_declaration(tokens);
+        } else {
+            float_variable_declaration(tokens);
+        }
+    } else if(tokens.size() != 1 && tokens[0] == "double") {
+        if(has_ordered_brackets(tokens[1])) {
+            double_array_declaration(tokens);
+        } else {
+            double_variable_declaration(tokens);
+        }
+    } else if(tokens.size() != 1 && tokens[0] == "string") {
+        string_variable_declaration(tokens);
+    } else if(tokens.size() == 1 && (tokens[0] == "int" || tokens[0] == "char" || tokens[0] == "float" || tokens[0] == "double" || tokens[0] == "bool")) {
+        throw std::runtime_error("error: declaration does not declare anything [-fpermissive]");
+    }
+}
+
+void Parser::make_the_body(std::vector<std::string>& if_block_lines) {
+    for(auto line : if_block_lines) {
+        // skip empty lines
+        if (line.empty()) {
+            // ++address;
+            continue;
+        }
+
+        std::vector<std::string> tokens = tokenize_line(line);
+        
+        lack_of_a_comma(line);
+        tokens[tokens.size() - 1].pop_back();
+
+        // variable declartion
+        handle_variable_declaration(tokens);
+        
+        if(tokens.size() == 3 && (tokens[1] == "+=" || tokens[1] == "-=" || tokens[1] == "*=" || tokens[1] == "/=" || tokens[1] == "=")) {
+            const std::string& variable = tokens[0];
+            const std::string& operation = tokens[1];
+            const std::string& operand = tokens[2];
+
+            compound_assignment_operator(variable, operand, operation);
+            continue;
+        }        
+        
+        if(tokens.size() == 5 && (tokens[3] == "+" || tokens[3] == "-" || tokens[3] == "*" || tokens[3] == "/")) {
+            arithmetic_operations(tokens[0], tokens[2], tokens[4], tokens[3]); 
+            continue; 
+        }
+
+        // std::cin
+        if(tokens[0] == "cin" ) {
+            throw std::runtime_error("error: 'cin' was not declared in this scope; did you mean 'std::cin'?");
+        }
+
+        if(tokens.size() == 1 && tokens[0] == "std::cin") {
+            // ++address;
+            tokens.clear();
+            continue;
+        }
+
+        if(tokens.size() >= 3 && tokens[0] == "std::cin") {
+            cin_implementation(tokens);
+            continue;
+        }
+
+        // std::cout
+        if(tokens[0] == "cout") {
+            throw std::runtime_error("error: 'cin' was not declared in this scope; did you mean 'std::cin'?");
+        }
+
+        if(tokens.size() == 1 && tokens[0] == "std::cout") {
+            // ++address;
+            tokens.clear();
+            continue;
+        }
+
+        if(tokens.size() >= 3 && tokens[0] == "std::cout" ) {
+            cout_implementation(tokens);
+            continue;
+        }
+
+        tokens.clear();
+
+    }
+}
+
 void Parser::parse() {
     std::size_t address = 1;
 
@@ -54,12 +172,7 @@ void Parser::parse() {
         // remove whitespace
         line = trim(line);
 
-        std::istringstream iss(line);  // Create a string stream from the line
-        std::string token;
-
-        while (iss >> token) {
-            tokens.push_back(token);  // Store each token in the vector
-        }
+        tokens = tokenize_line(line);
 
         if(tokens[0] == "#include") {
             if(tokens.size() > 2 || tokens[1][tokens[1].size() - 1] != '>' || tokens[1][0] != '<') {
@@ -88,12 +201,13 @@ void Parser::parse() {
                 std::vector<std::string> if_block_lines;
 
                 ++address;
-                while (line_map[address] != "}") {
+                while(line_map[address] != "}") {
+
                     if_block_lines.push_back(line_map[address]);
                     ++address;
                 }
 
-                // katarel marminy
+                make_the_body(if_block_lines);
 
                 tokens.clear();
                 ++address;
@@ -112,41 +226,8 @@ void Parser::parse() {
         lack_of_a_comma(line);
         tokens[tokens.size() - 1].pop_back();
         
-        if(tokens.size() != 1 && tokens[0] == "int") { 
-            if(has_ordered_brackets(tokens[1])) {
-                int_array_declaration(tokens);
-            } else {
-                int_variable_declaration(tokens);
-            }
-        } else if(tokens.size() != 1 && tokens[0] == "char") {
-            if(has_ordered_brackets(tokens[1])) {
-                char_array_declaration(tokens);
-            } else {
-                char_variable_declaration(tokens);
-            }
-        } else if(tokens.size() != 1 && tokens[0] == "bool") {
-            if(has_ordered_brackets(tokens[1])) {
-                bool_array_declaration(tokens);
-            } else {
-                bool_variable_declaration(tokens);
-            }
-        } else if(tokens.size() != 1 && tokens[0] == "float") {
-            if(has_ordered_brackets(tokens[1])) {
-                float_array_declaration(tokens);
-            } else {
-                float_variable_declaration(tokens);
-            }
-        } else if(tokens.size() != 1 && tokens[0] == "double") {
-            if(has_ordered_brackets(tokens[1])) {
-                double_array_declaration(tokens);
-            } else {
-                double_variable_declaration(tokens);
-            }
-        } else if(tokens.size() != 1 && tokens[0] == "string") {
-            string_variable_declaration(tokens);
-        } else if(tokens.size() == 1 && (tokens[0] == "int" || tokens[0] == "char" || tokens[0] == "float" || tokens[0] == "double" || tokens[0] == "bool")) {
-            throw std::runtime_error("error: declaration does not declare anything [-fpermissive]");
-        }
+        // variable declartion
+        handle_variable_declaration(tokens);
         
         if(tokens.size() == 3 && (tokens[1] == "+=" || tokens[1] == "-=" || tokens[1] == "*=" || tokens[1] == "/=" || tokens[1] == "=")) {
             const std::string& variable = tokens[0];
@@ -160,6 +241,7 @@ void Parser::parse() {
             arithmetic_operations(tokens[0], tokens[2], tokens[4], tokens[3]);  
         }
 
+        // std::cin
         if(tokens[0] == "cin" ) {
             throw std::runtime_error("error: 'cin' was not declared in this scope; did you mean 'std::cin'?");
         }
@@ -174,11 +256,12 @@ void Parser::parse() {
             cin_implementation(tokens);
         }
 
+        // std::cout
         if(tokens[0] == "cout") {
             throw std::runtime_error("error: 'cin' was not declared in this scope; did you mean 'std::cin'?");
         }
 
-        if(token.size() == 1 && tokens[0] == "std::cout") {
+        if(tokens.size() == 1 && tokens[0] == "std::cout") {
             ++address;
             tokens.clear();
             continue;
@@ -205,6 +288,7 @@ void Parser::lack_of_a_comma(std::string& line) {
     if (line.back() != ';') {
         throw std::runtime_error("Error: Missing semicolon at the end of the line.");
     }
+
 
     // Remove the semicolon from the end of the line
     line.pop_back();

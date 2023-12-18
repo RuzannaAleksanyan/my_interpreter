@@ -44,6 +44,12 @@ private:
 
     bool condition_check(std::vector<std::string>& tokens);
 
+    std::vector<std::string> tokenize_line(const std::string& line);
+
+    void handle_variable_declaration(std::vector<std::string>& tokens);
+
+    void make_the_body(std::vector<std::string>& if_block_lines);
+
     variable_value get_variable_value(const std::string& variable_name) {
         if (int_variables.find(variable_name) != int_variables.end()) {
             return int_variables[variable_name];
@@ -61,29 +67,6 @@ private:
             throw std::runtime_error("Variable not found: " + variable_name);
         }
     }
-
-    // template<typename T>
-    // T perform_operation(const std::variant<int, float, double, std::string>& v1, 
-    //                     const std::variant<int, float, double, std::string>& v2,
-    //                     const std::string& op) {
-    //     if (auto val1 = std::get_if<T>(&v1); val1) {
-    //         if (auto val2 = std::get_if<T>(&v2); val2) {
-    //             if(op == "-") {
-    //                 return *val1 - *val2;
-    //             } else if(op == "+") {
-    //                 return *val1 + *val2;
-    //             } else if (op == "*") {
-    //                 return *val1 * *val2;
-    //             } else if (op == "/") {
-    //                 if (*val2 == 0) {
-    //                     throw std::runtime_error("Division by zero");
-    //                 }
-    //                 return *val1 / *val2;
-    //             }
-    //         }
-    //     }
-    //     throw std::runtime_error("Type mismatch or unsupported operation");
-    // }
 
 
 public:
