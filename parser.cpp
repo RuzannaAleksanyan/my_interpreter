@@ -220,28 +220,29 @@ void Parser::parse() {
         }
 
         if(tokens[0] == "while" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
-            auto op1 = get_variable_value(tokens[2]);
-            auto op2 = get_variable_value(tokens[4]);
+            if(condition_check(tokens)) {
 
-            std::size_t address_while = address;
+                std::vector<std::string> if_block_lines;
 
-            if(perform_comparison(tokens[3], op1, op2)) {
-                while(perform_comparison(tokens[3], op1, op2)) {
-                    std::vector<std::string> while_block_lines;
+                ++address;
+                while(line_map[address] != "}") {
 
+                    if_block_lines.push_back(line_map[address]);
                     ++address;
-                    while(line_map[address] != "}") {
-                        while_block_lines.push_back(line_map[address]);
-                        ++address;
-                    }
+                }
+
+                std::cout << "mtav" << std::endl;
+                auto op1 = get_variable_value(tokens[2]);
+                auto op2 = get_variable_value(tokens[4]);
+
+                std::size_t address_while = address;
+                
+                while(perform_comparison(tokens[3], op1, op2)) {
+                    make_the_body(if_block_lines);
 
                     op1 = get_variable_value(tokens[2]);
-                    op2 = get_variable_value(tokens[4]); 
-                    
-                    make_the_body(while_block_lines);
-                    
-                    address = address_while;
-                }                
+                    op2 = get_variable_value(tokens[4]);
+                }
 
                 tokens.clear();
                 ++address;
@@ -256,8 +257,6 @@ void Parser::parse() {
             ++address;
             continue;
         }
-
-
 
         lack_of_a_comma(line);
         tokens[tokens.size() - 1].pop_back();

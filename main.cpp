@@ -1,8 +1,9 @@
 #include "parser.h"
 #include <exception>
 
-// if
-// while
+// if-um ev while-um popoxakan chenq karox haytararel ev chenq karox unenal nerdrvac if kam while
+// while-y chi karox anverj cikl ynknel, ajcinqn paymani da\ty chi karox datark linel
+// while kisat
 // fixed bug!
 // char float_arr[x] = { '2', 'c', 3, 4 } ;
 

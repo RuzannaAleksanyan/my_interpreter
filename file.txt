@@ -3,11 +3,7 @@
 int main() {
     int s = 5;
     int y = 8;
-    if ( s < y ) {
-        s += 4;
-        std::cin >> s;
-    }
-    while ( s < 1 ) {
+    while ( 0 ) {
         y = 55;
     }
     double sh = 8;
