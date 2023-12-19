@@ -50,7 +50,7 @@ private:
 
     void handle_variable_declaration(std::vector<std::string>& tokens);
 
-    void make_the_body(std::vector<std::string>& if_block_lines);
+    void make_the_body(std::vector<std::string>& block_lines);
 
     // bool perform_comparison(const std::string& op, const auto& value1, const auto& value2);
     template <typename T, typename F>
@@ -90,7 +90,7 @@ private:
 
 
 public:
-    Parser(const std::string& filename) noexcept;
+    Parser(const std::string& filename);
 
     void print_int() noexcept;
     void print_char() noexcept;

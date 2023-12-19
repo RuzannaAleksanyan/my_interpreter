@@ -88,17 +88,23 @@ void Parser::handle_variable_declaration(std::vector<std::string>& tokens) {
     }
 }
 
-void Parser::make_the_body(std::vector<std::string>& if_block_lines) {
-    for(auto line : if_block_lines) {
+void Parser::make_the_body(std::vector<std::string>& block_lines) {
+    for(auto line : block_lines) {
+        
         // skip empty lines
         if (line.empty()) {
             continue;
         }
 
         std::vector<std::string> tokens = tokenize_line(line);
-        
+
+        // if(line != block_lines[0]) {
+        //     lack_of_a_comma(line);
+        // }
         lack_of_a_comma(line);
+        
         tokens[tokens.size() - 1].pop_back();
+
 
         // variable declartion
         handle_variable_declaration(tokens);
@@ -179,12 +185,16 @@ void Parser::parse() {
             tokens.clear();
             ++address;
             continue;
-        } else if(tokens.size() == 3 && tokens[0] == "int" && tokens[1] == "main()" && tokens[2] == "{") {
+        } 
+        
+        if(tokens.size() == 3 && tokens[0] == "int" && tokens[1] == "main()" && tokens[2] == "{") {
             // Skip the main() declaration
             tokens.clear();
             ++address;
             continue;
-        } else if(tokens.size() == 1 && tokens[0] == "}" ) {
+        } 
+
+        if(tokens.size() == 1 && tokens[0] == "}" ) {
             // Skip the { declaration
             tokens.clear();
             ++address;
@@ -193,7 +203,7 @@ void Parser::parse() {
         } 
 
         if(tokens[0] == "if" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
-            if(condition_check(tokens)) {
+           if(condition_check(tokens)) {
                 std::vector<std::string> if_block_lines;
 
                 ++address;
@@ -202,6 +212,7 @@ void Parser::parse() {
                     if_block_lines.push_back(line_map[address]);
                     ++address;
                 }
+                
 
                 make_the_body(if_block_lines);
 
@@ -216,6 +227,7 @@ void Parser::parse() {
 
             tokens.clear();
             ++address;
+            // address += 2;
             continue;
         }
 
@@ -231,7 +243,6 @@ void Parser::parse() {
                     ++address;
                 }
 
-                std::cout << "mtav" << std::endl;
                 auto op1 = get_variable_value(tokens[2]);
                 auto op2 = get_variable_value(tokens[4]);
 
