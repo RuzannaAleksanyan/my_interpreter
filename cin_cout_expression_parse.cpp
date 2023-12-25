@@ -38,6 +38,7 @@ void Parser::cin_implementation(std::vector<std::string>& tokens) {
             throw std::runtime_error("'" + tokens[i] + "' was not declared in this scope");
         }
     } 
+    
 }
 
 void Parser::cout_implementation(std::vector<std::string>& tokens) {
