@@ -2,6 +2,7 @@
 #include <valarray>
 
 void Parser::cin_implementation(std::vector<std::string>& tokens) {
+    std::cout << "cin" << std::endl;
     bool flag = false;
     for(const auto& in : include_vector) {
         if(in == "<iostream>") {
@@ -13,14 +14,15 @@ void Parser::cin_implementation(std::vector<std::string>& tokens) {
         throw std::runtime_error("'" + tokens[0] + "' is defined in header '<iostream>'; did you forget to '#include <iostream>'?");
     }
 
+            // std::cout << tokens.size() << std::endl;
+    if(tokens.size() == 2) {
+        throw std::runtime_error("error: expected primary-expression before ';' token");
+    }
+
     for(size_t i = 1; i < tokens.size() - 1; i += 2) {
         if(tokens[i] != ">>") {
             throw std::runtime_error("error: not match for 'operator" + tokens[i] + "'");
         } 
-
-        if(tokens.size() == 2) {
-            throw std::runtime_error("error: expected primary-expression before ';' token");
-        }
 
         if(int_variables.find(tokens[i + 1]) != int_variables.end()) {
             std::cin >> int_variables[tokens[i + 1]];
@@ -41,7 +43,7 @@ void Parser::cin_implementation(std::vector<std::string>& tokens) {
     
 }
 
-void Parser::cout_implementation(std::vector<std::string>& tokens) {
+void Parser::cout_implementation(std::vector<std::string> tokens) {
     bool flag = false;
     for(const auto& in : include_vector) {
         if(in == "<iostream>") {
@@ -64,7 +66,7 @@ void Parser::cout_implementation(std::vector<std::string>& tokens) {
 
         if(tokens[i + 1] == "endl") {
             throw std::runtime_error("'" + tokens[i + 1] + "' was not declared in this scope");
-        }
+        }   
 
         if(int_variables.find(tokens[i + 1]) != int_variables.end()) {
             std::cout << int_variables[tokens[i + 1]];

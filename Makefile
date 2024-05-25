@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = g++
-CFLAGS = -Wall -std=c++17
+CFLAGS = -Wall -std=c++20
 
 # Source files
 SRCS = main.cpp parser.cpp load_file.cpp variable_defination.cpp cin_cout_expression_parse.cpp array_defination.cpp print_variables.cpp print_arrays.cpp if_condition.cpp

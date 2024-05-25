@@ -3,10 +3,19 @@
 int main() {
     int s = 5;
     int y = 8;
+    double sh = 8;
+    s = y + y;
+    std::cin;
+    std::cout;
+    // cout;
+    // cin;
+    std::cout << s;
+    std::cout << "hello";
+    std::cin >> y;
     if ( s < y ) {
+        // body
         
     }
 
-    
-    double sh = 8;
+    int k = 9;
 }

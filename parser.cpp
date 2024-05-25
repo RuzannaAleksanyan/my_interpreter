@@ -89,72 +89,7 @@ void Parser::handle_variable_declaration(std::vector<std::string>& tokens) {
 }
 
 void Parser::make_the_body(std::vector<std::string>& block_lines) {
-    for(auto line : block_lines) {
-        
-        // skip empty lines
-        if (line.empty()) {
-            continue;
-        }
-
-        std::vector<std::string> tokens = tokenize_line(line);
-
-        // if(line != block_lines[0]) {
-        //     lack_of_a_comma(line);
-        // }
-        lack_of_a_comma(line);
-        
-        tokens[tokens.size() - 1].pop_back();
-
-
-        // variable declartion
-        handle_variable_declaration(tokens);
-        
-        if(tokens.size() == 3 && (tokens[1] == "+=" || tokens[1] == "-=" || tokens[1] == "*=" || tokens[1] == "/=" || tokens[1] == "=")) {
-            const std::string& variable = tokens[0];
-            const std::string& operation = tokens[1];
-            const std::string& operand = tokens[2];
-
-            compound_assignment_operator(variable, operand, operation);
-            continue;
-        }        
-        
-        if(tokens.size() == 5 && (tokens[3] == "+" || tokens[3] == "-" || tokens[3] == "*" || tokens[3] == "/")) {
-            arithmetic_operations(tokens[0], tokens[2], tokens[4], tokens[3]); 
-            continue; 
-        }
-
-        // std::cin
-        if(tokens[0] == "cin" ) {
-            throw std::runtime_error("error: 'cin' was not declared in this scope; did you mean 'std::cin'?");
-        }
-
-        if(tokens.size() == 1 && tokens[0] == "std::cin") {
-            tokens.clear();
-            continue;
-        }
-
-        if(tokens.size() >= 3 && tokens[0] == "std::cin") {
-            cin_implementation(tokens);
-            continue;
-        }
-
-        // std::cout
-        if(tokens[0] == "cout") {
-            throw std::runtime_error("error: 'cin' was not declared in this scope; did you mean 'std::cin'?");
-        }
-
-        if(tokens.size() == 1 && tokens[0] == "std::cout") {
-            tokens.clear();
-            continue;
-        }
-
-        if(tokens.size() >= 3 && tokens[0] == "std::cout" ) {
-            cout_implementation(tokens);
-            continue;
-        }
-
-        tokens.clear();
-    }
+    std::cout << "katarel if-i kam while-i marminy" << std::endl;
 }
 
 void Parser::parse() {
@@ -203,37 +138,8 @@ void Parser::parse() {
         } 
 
         if(tokens[0] == "if" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
-           if(condition_check(tokens)) {
-                std::vector<std::string> if_block_lines;
-
-                ++address;
-                while(line_map[address] != "}") {
-
-                    if_block_lines.push_back(line_map[address]);
-                    ++address;
-                }
-                
-
-                make_the_body(if_block_lines);
-
-                tokens.clear();
-                ++address;
-                continue;
-            }
-
-            while(line_map[address] != "}") {
-                ++address;
-            }
-
-            tokens.clear();
-            ++address;
-            // address += 2;
-            continue;
-        }
-
-        if(tokens[0] == "while" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
-            if(condition_check(tokens)) {
-
+           std::vector<std::string> condition = tokens;
+           if(condition_check(condition)) {
                 std::vector<std::string> if_block_lines;
 
                 ++address;
@@ -243,33 +149,65 @@ void Parser::parse() {
                     ++address;
                 }
 
-                auto op1 = get_variable_value(tokens[2]);
-                auto op2 = get_variable_value(tokens[4]);
-
-                std::size_t address_while = address;
-                
-                while(perform_comparison(tokens[3], op1, op2)) {
+                while(condition_check(condition)) {
                     make_the_body(if_block_lines);
-
-                    op1 = get_variable_value(tokens[2]);
-                    op2 = get_variable_value(tokens[4]);
                 }
+                
 
-                tokens.clear();
-                ++address;
-                continue;
+        // //         tokens.clear();
+        // //         ++address;
+        // //         continue;
             }
 
-            while(line_map[address] != "}") {
-                ++address;
-            }
+        // //     while(line_map[address] != "}") {
+        // //         ++address;
+        // //     }
 
-            tokens.clear();
-            ++address;
-            continue;
+        // //     tokens.clear();
+        // //     ++address;
+        // //     // address += 2;
+        // //     continue;
         }
 
-        lack_of_a_comma(line);
+        // if(tokens[0] == "while" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
+        //     if(condition_check(tokens)) {
+        //         std::vector<std::string> if_block_lines;
+
+        //         ++address;
+        //         while(line_map[address] != "}") {
+
+        //             if_block_lines.push_back(line_map[address]);
+        //             ++address;
+        //         }
+
+        //         auto op1 = get_variable_value(tokens[2]);
+        //         auto op2 = get_variable_value(tokens[4]);
+
+        //         std::size_t address_while = address;
+                
+        //         while(perform_comparison(tokens[3], op1, op2)) {
+        //             make_the_body(if_block_lines);
+
+        //             op1 = get_variable_value(tokens[2]);
+        //             op2 = get_variable_value(tokens[4]);
+        //         }
+
+        //         tokens.clear();
+        //         ++address;
+        //         continue;
+        //     }
+
+        //     while(line_map[address] != "}") {
+        //         ++address;
+        //     }
+
+        //     tokens.clear();
+        //     ++address;
+        //     continue;
+        // }
+
+        // stugel ete if kam while che nor kanchel
+        // lack_of_a_comma(line);
         tokens[tokens.size() - 1].pop_back();
         
         // variable declartion
@@ -288,7 +226,7 @@ void Parser::parse() {
         }
 
         // std::cin
-        if(tokens[0] == "cin" ) {
+        if(tokens[0] == "cin;" ) {
             throw std::runtime_error("error: 'cin' was not declared in this scope; did you mean 'std::cin'?");
         }
 
@@ -335,7 +273,6 @@ void Parser::lack_of_a_comma(std::string& line) {
         throw std::runtime_error("Error: Missing semicolon at the end of the line.");
     }
 
-
     // Remove the semicolon from the end of the line
     line.pop_back();
 }
@@ -360,6 +297,7 @@ bool Parser::is_number(const std::string& str) noexcept {
 
 void Parser::compound_assignment_operator(const std::string& variable, const std::string& operand, const std::string& assignment) {
     Compound_Assignment_Operator obj;
+    
     if (int_variables.find(variable) != int_variables.end() && int_variables.find(operand) != int_variables.end()) {
         obj.compound_assignment_operator_impl<int, int>(int_variables, int_variables, variable, operand, assignment);
     } else if (int_variables.find(variable) != int_variables.end() && char_variables.find(operand) != char_variables.end()) {

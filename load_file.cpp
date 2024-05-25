@@ -16,8 +16,8 @@ std::string Parser::trim(const std::string& str) noexcept {
     return str.substr(start, end - start + 1);
 }
 
-void Parser::load_from_file(const std::string& filename) {
-    std::ifstream file(filename);
+void Parser::load_from_file() {
+    std::ifstream file(m_filename);
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open file");
     }

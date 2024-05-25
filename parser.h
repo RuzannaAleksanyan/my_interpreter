@@ -53,6 +53,7 @@ private:
     void make_the_body(std::vector<std::string>& block_lines);
 
     // bool perform_comparison(const std::string& op, const auto& value1, const auto& value2);
+
     template <typename T, typename F>
     bool perform_comparison(const std::string& op, const T& value1, const F& value2) {
         if(op == "==") {
@@ -119,7 +120,7 @@ public:
     void double_array_declaration(std::vector<std::string>& tokens);
     void bool_array_declaration(std::vector<std::string>& tokens);
 
-    void load_from_file(const std::string& filename);
+    void load_from_file();
 
     bool has_main_function(const std::string& code) noexcept;
     std::string remove_comments(const std::string& code);
@@ -131,7 +132,7 @@ public:
     void check_variable_exists(const std::string& variable_name);
 
     void cin_implementation(std::vector<std::string>& tokens);
-    void cout_implementation(std::vector<std::string>& tokens);
+    void cout_implementation(std::vector<std::string> tokens);
 
     template <typename T>
     T search_variable(const std::string& variable, const std::unordered_map<std::string, T>& map) {
