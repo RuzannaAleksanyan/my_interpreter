@@ -16,13 +16,13 @@ int main() {
 
     parser.parse();
 
-    parser.print_include();
-    parser.print_int();
-    parser.print_char();
-    parser.print_float();
-    parser.print_double();
-    parser.print_bool();
-    parser.print_string();
+    // parser.print_include();
+    // parser.print_int();
+    // parser.print_char();
+    // parser.print_float();
+    // parser.print_double();
+    // parser.print_bool();
+    // parser.print_string();
 
 
     // parser.print_int_array();

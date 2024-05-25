@@ -52,7 +52,7 @@ private:
 
     void make_the_body(std::vector<std::string>& block_lines);
 
-    // bool perform_comparison(const std::string& op, const auto& value1, const auto& value2);
+    bool perform_comparison(const std::string& op, const std::string& op1, const std::string& op2);
 
     template <typename T, typename F>
     bool perform_comparison(const std::string& op, const T& value1, const F& value2) {

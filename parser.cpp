@@ -144,67 +144,48 @@ void Parser::parse() {
 
                 ++address;
                 while(line_map[address] != "}") {
+                    if_block_lines.push_back(line_map[address]);
+                    ++address;
+                }
 
+                make_the_body(if_block_lines);
+            } else {
+                while(line_map[address] != "}") {
+                    ++address;
+                }
+            }
+
+            tokens.clear();
+            ++address;
+            continue;
+        }
+
+        if(tokens[0] == "while" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
+            std::vector<std::string> condition = tokens;
+           if(condition_check(condition)) {
+                std::vector<std::string> if_block_lines;
+
+                ++address;
+                while(line_map[address] != "}") {
                     if_block_lines.push_back(line_map[address]);
                     ++address;
                 }
 
                 while(condition_check(condition)) {
                     make_the_body(if_block_lines);
+                    // jnjel make_the_body function-y greluc heto
+                    break;
                 }
-                
-
-        // //         tokens.clear();
-        // //         ++address;
-        // //         continue;
+            } else {
+                while(line_map[address] != "}") {
+                    ++address;
+                }
             }
 
-        // //     while(line_map[address] != "}") {
-        // //         ++address;
-        // //     }
-
-        // //     tokens.clear();
-        // //     ++address;
-        // //     // address += 2;
-        // //     continue;
+            tokens.clear();
+            ++address;
+            continue;
         }
-
-        // if(tokens[0] == "while" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
-        //     if(condition_check(tokens)) {
-        //         std::vector<std::string> if_block_lines;
-
-        //         ++address;
-        //         while(line_map[address] != "}") {
-
-        //             if_block_lines.push_back(line_map[address]);
-        //             ++address;
-        //         }
-
-        //         auto op1 = get_variable_value(tokens[2]);
-        //         auto op2 = get_variable_value(tokens[4]);
-
-        //         std::size_t address_while = address;
-                
-        //         while(perform_comparison(tokens[3], op1, op2)) {
-        //             make_the_body(if_block_lines);
-
-        //             op1 = get_variable_value(tokens[2]);
-        //             op2 = get_variable_value(tokens[4]);
-        //         }
-
-        //         tokens.clear();
-        //         ++address;
-        //         continue;
-        //     }
-
-        //     while(line_map[address] != "}") {
-        //         ++address;
-        //     }
-
-        //     tokens.clear();
-        //     ++address;
-        //     continue;
-        // }
 
         // stugel ete if kam while che nor kanchel
         // lack_of_a_comma(line);
