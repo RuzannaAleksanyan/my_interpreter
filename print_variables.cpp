@@ -6,6 +6,12 @@ void Parser::print_int() noexcept {
     }
 }
 
+void Parser::print_scope_int() noexcept {
+    for(const auto& map : scope_int_variables) {
+        std::cout << map.first << " " << map.second << std::endl;
+    }
+}
+
 void Parser::print_char() noexcept {
     for(const auto& map : char_variables) {
         std::cout << map.first << " " << map.second << std::endl;

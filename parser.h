@@ -29,6 +29,19 @@ private:
     std::map<std::string, std::vector<double>> double_array;
     std::map<std::string, std::vector<bool>> bool_array;
 
+    std::unordered_map<std::string, int> scope_int_variables;
+    std::unordered_map<std::string, bool> scope_bool_variables;
+    std::unordered_map<std::string, char> scope_char_variables;
+    std::unordered_map<std::string, float> scope_float_variables;
+    std::unordered_map<std::string, double> scope_double_variables;
+    std::unordered_map<std::string, std::string> scope_string_variables;
+
+    std::map<std::string, std::vector<int>> scope_int_array;
+    std::map<std::string, std::vector<char>> scope_char_array;
+    std::map<std::string, std::vector<float>> scope_float_array;
+    std::map<std::string, std::vector<double>> scope_double_array;
+    std::map<std::string, std::vector<bool>> scope_bool_array;
+
     std::vector<std::string> include_vector;
     std::map<int, std::string> line_map;
 
@@ -44,11 +57,13 @@ private:
     void name_verification(const std::string& token);
     bool contains_if_condition(const std::string& line) noexcept;
 
+    void clear_scope_maps();
+
     bool condition_check(std::vector<std::string>& tokens);
 
     std::vector<std::string> tokenize_line(const std::string& line) noexcept;
 
-    void handle_variable_declaration(std::vector<std::string>& tokens);
+    void handle_variable_declaration(std::vector<std::string>& tokens, bool flag);
 
     void make_the_body(std::vector<std::string>& block_lines);
 
@@ -107,18 +122,20 @@ public:
     void print_double_array() noexcept;
     void print_bool_array() noexcept;
 
-    void int_variable_declaration(std::vector<std::string>& tokens);
-    void char_variable_declaration(std::vector<std::string>& tokens);
-    void float_variable_declaration(std::vector<std::string>& tokens);
-    void double_variable_declaration(std::vector<std::string>& tokens);
-    void bool_variable_declaration(std::vector<std::string>& tokens);
-    void string_variable_declaration(std::vector<std::string>& tokens);
+    void print_scope_int() noexcept;
 
-    void int_array_declaration(std::vector<std::string>& tokens);
-    void char_array_declaration(std::vector<std::string>& tokens);
-    void float_array_declaration(std::vector<std::string>& tokens);
-    void double_array_declaration(std::vector<std::string>& tokens);
-    void bool_array_declaration(std::vector<std::string>& tokens);
+    void int_variable_declaration(std::vector<std::string>& tokens, bool flag);
+    void char_variable_declaration(std::vector<std::string>& tokens, bool flag);
+    void float_variable_declaration(std::vector<std::string>& tokens, bool flag);
+    void double_variable_declaration(std::vector<std::string>& tokens, bool flag);
+    void bool_variable_declaration(std::vector<std::string>& tokens, bool flag);
+    void string_variable_declaration(std::vector<std::string>& tokens, bool flag);
+
+    void int_array_declaration(std::vector<std::string>& tokens, bool flag);
+    void char_array_declaration(std::vector<std::string>& tokens, bool flag);
+    void float_array_declaration(std::vector<std::string>& tokens, bool flag);
+    void double_array_declaration(std::vector<std::string>& tokens, bool flag);
+    void bool_array_declaration(std::vector<std::string>& tokens, bool flag);
 
     void load_from_file();
 

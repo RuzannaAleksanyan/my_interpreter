@@ -13,12 +13,9 @@ int main() {
     // std::cout << "hello";
     // std::cin >> y;
     if ( s < y ) {
-        // body
-
-    }
-
-    while ( s < y ) {
-        // body
+        std::cin >> s;
+        std::cout << "hello" << std::endl;
+        int k = 0;
     }
 
     int k = 9;

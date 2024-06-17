@@ -50,47 +50,126 @@ std::vector<std::string> Parser::tokenize_line(const std::string& line) noexcept
     return tokens;
 }
 
-void Parser::handle_variable_declaration(std::vector<std::string>& tokens) {
+void Parser::handle_variable_declaration(std::vector<std::string>& tokens, bool flag) {
     if(tokens.size() != 1 && tokens[0] == "int") { 
         if(has_ordered_brackets(tokens[1])) {
-            int_array_declaration(tokens);
+            int_array_declaration(tokens, flag);
         } else {
-            int_variable_declaration(tokens);
+            int_variable_declaration(tokens, flag);
         }
     } else if(tokens.size() != 1 && tokens[0] == "char") {
         if(has_ordered_brackets(tokens[1])) {
-            char_array_declaration(tokens);
+            char_array_declaration(tokens, flag);
         } else {
-            char_variable_declaration(tokens);
+            char_variable_declaration(tokens, flag);
         }
     } else if(tokens.size() != 1 && tokens[0] == "bool") {
         if(has_ordered_brackets(tokens[1])) {
-            bool_array_declaration(tokens);
+            bool_array_declaration(tokens, flag);
         } else {
-            bool_variable_declaration(tokens);
+            bool_variable_declaration(tokens, flag);
         }
     } else if(tokens.size() != 1 && tokens[0] == "float") {
         if(has_ordered_brackets(tokens[1])) {
-            float_array_declaration(tokens);
+            float_array_declaration(tokens, flag);
         } else {
-            float_variable_declaration(tokens);
+            float_variable_declaration(tokens, flag);
         }
     } else if(tokens.size() != 1 && tokens[0] == "double") {
         if(has_ordered_brackets(tokens[1])) {
-            double_array_declaration(tokens);
+            double_array_declaration(tokens, flag);
         } else {
-            double_variable_declaration(tokens);
+            double_variable_declaration(tokens, flag);
         }
     } else if(tokens.size() != 1 && tokens[0] == "string") {
-        string_variable_declaration(tokens);
+        string_variable_declaration(tokens, flag);
     } else if(tokens.size() == 1 && (tokens[0] == "int" || tokens[0] == "char" || tokens[0] == "float" || tokens[0] == "double" || tokens[0] == "bool")) {
         throw std::runtime_error("error: declaration does not declare anything [-fpermissive]");
     }
 }
 
 void Parser::make_the_body(std::vector<std::string>& block_lines) {
-    std::cout << "katarel if-i kam while-i marminy" << std::endl;
+    std::vector<std::string> tokens;
+    for(int i = 0; i < block_lines.size(); ++i) {
+        std::string line = block_lines[i];
+
+        // skip empty lines
+        if (line.empty()) {
+            ++i;
+            continue;
+        }
+
+        // remove whitespace
+        line = trim(line);
+
+        tokens = tokenize_line(line);
+
+        tokens[tokens.size() - 1].pop_back();
+        
+        // variable and array declartion
+        bool flag = 1;
+        handle_variable_declaration(tokens, flag);
+        
+        if(tokens.size() == 3 && (tokens[1] == "+=" || tokens[1] == "-=" || tokens[1] == "*=" || tokens[1] == "/=" || tokens[1] == "=")) {
+            const std::string& variable = tokens[0];
+            const std::string& operation = tokens[1];
+            const std::string& operand = tokens[2];
+
+            compound_assignment_operator(variable, operand, operation);
+        }        
+        
+        if(tokens.size() == 5 && (tokens[3] == "+" || tokens[3] == "-" || tokens[3] == "*" || tokens[3] == "/")) {
+            arithmetic_operations(tokens[0], tokens[2], tokens[4], tokens[3]);  
+        }
+
+        // std::cin
+        if(tokens[0] == "cin;" ) {
+            throw std::runtime_error("error: 'cin' was not declared in this scope; did you mean 'std::cin'?");
+        }
+
+        if(tokens.size() == 1 && tokens[0] == "std::cin") {
+            tokens.clear();
+            continue;
+        }
+
+        if(tokens.size() >= 3 && tokens[0] == "std::cin") {
+            cin_implementation(tokens);
+        }
+
+        // std::cout
+        if(tokens[0] == "cout") {
+            throw std::runtime_error("error: 'cin' was not declared in this scope; did you mean 'std::cin'?");
+        }
+
+        if(tokens.size() == 1 && tokens[0] == "std::cout") {
+            tokens.clear();
+            continue;
+        }
+
+        if(tokens.size() >= 3 && tokens[0] == "std::cout" ) {
+            cout_implementation(tokens);
+        }
+
+        tokens.clear();
+
+    }
 }
+
+void clear_scope_maps() {
+    // scope_int_variables.clear();
+    // scope_bool_variables.clear();
+    // scope_char_variables.clear();
+    // scope_float_variables.clear();
+    // scope_double_variables.clear();
+    // scope_string_variables.clear();
+
+    // scope_int_array.clear();
+    // scope_char_array.clear();
+    // scope_float_array.clear();
+    // scope_double_array.clear();
+    // scope_bool_array.clear();
+}
+
 
 void Parser::parse() {
     std::size_t address = 1;
@@ -134,7 +213,6 @@ void Parser::parse() {
             tokens.clear();
             ++address;
             continue;
-            std::cout << "yes" << std::endl;
         } 
 
         if(tokens[0] == "if" && tokens[1] == "(" && tokens[tokens.size() - 2] == ")" && tokens[tokens.size() - 1] == "{") {
@@ -149,6 +227,7 @@ void Parser::parse() {
                 }
 
                 make_the_body(if_block_lines);
+                clear_scope_maps();
             } else {
                 while(line_map[address] != "}") {
                     ++address;
@@ -173,9 +252,9 @@ void Parser::parse() {
 
                 while(condition_check(condition)) {
                     make_the_body(if_block_lines);
-                    // jnjel make_the_body function-y greluc heto
                     break;
                 }
+                clear_scope_maps();
             } else {
                 while(line_map[address] != "}") {
                     ++address;
@@ -187,12 +266,11 @@ void Parser::parse() {
             continue;
         }
 
-        // stugel ete if kam while che nor kanchel
-        // lack_of_a_comma(line);
         tokens[tokens.size() - 1].pop_back();
         
-        // variable declartion
-        handle_variable_declaration(tokens);
+        // variable and array declartion
+        bool flag = 0;
+        handle_variable_declaration(tokens, flag);
         
         if(tokens.size() == 3 && (tokens[1] == "+=" || tokens[1] == "-=" || tokens[1] == "*=" || tokens[1] == "/=" || tokens[1] == "=")) {
             const std::string& variable = tokens[0];

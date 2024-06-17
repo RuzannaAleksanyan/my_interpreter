@@ -2,7 +2,6 @@
 #include <valarray>
 
 void Parser::cin_implementation(std::vector<std::string>& tokens) {
-    std::cout << "cin" << std::endl;
     bool flag = false;
     for(const auto& in : include_vector) {
         if(in == "<iostream>") {

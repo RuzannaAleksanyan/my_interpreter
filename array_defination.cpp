@@ -86,7 +86,7 @@ void Parser::name_verification(const std::string& token) {
     }
 }
 
-void Parser::int_array_declaration(std::vector<std::string>& tokens) {
+void Parser::int_array_declaration(std::vector<std::string>& tokens, bool flag) {
     std::string size = extract_content_in_brackets(tokens[1]);
     int value = 0;
     std::string array_name = extract_string_before_bracket(tokens[1]);
@@ -123,27 +123,39 @@ void Parser::int_array_declaration(std::vector<std::string>& tokens) {
             }
 
             if(is_number(tokens[i])) {
-                int_array[array_name].push_back(std::stoi(tokens[i]));
+                if(flag == 0) {
+                    int_array[array_name].push_back(std::stoi(tokens[i]));
+                } else if(flag == 1) {
+                    scope_int_array[array_name].push_back(std::stoi(tokens[i]));
+                }
             } else if(tokens[i][0] == '\'' && tokens[i][tokens[i].size() - 1] == '\'') {
                 tokens[i].pop_back();
                 tokens[i] = tokens[i].substr(1, tokens[i].size() - 1);
 
                 if(tokens[i].size() == 1 && tokens[i][0] != '}') {
                     int val = tokens[i][0];
-                    int_array[array_name].push_back(val);
+                    if(flag == 0) {
+                        int_array[array_name].push_back(val);
+                    } else if(flag == 1) {
+                        scope_int_array[array_name].push_back(val);
+                    }
                 } else {
                     throw std::runtime_error("error: invalid conversion");
                 }
             }
         }
     } else if(tokens.size() == 2) {
-        int_array[extract_string_before_bracket(tokens[1])];
+        if(flag == 0) {
+            int_array[extract_string_before_bracket(tokens[1])];
+        } else if(flag == 1) {
+            scope_int_array[extract_string_before_bracket(tokens[1])];
+        }
     } else {
         throw std::runtime_error(" ");
     }
 }
 
-void Parser::char_array_declaration(std::vector<std::string>& tokens) {
+void Parser::char_array_declaration(std::vector<std::string>& tokens, bool flag) {
     std::string size = extract_content_in_brackets(tokens[1]);
     int value = 0;
     std::string array_name = extract_string_before_bracket(tokens[1]);
@@ -179,29 +191,45 @@ void Parser::char_array_declaration(std::vector<std::string>& tokens) {
             }
 
             if(is_number(tokens[i])) {
-                char_array[array_name].push_back(std::stoi(tokens[i]));
+                if(flag == 0) {
+                    char_array[array_name].push_back(std::stoi(tokens[i]));
+                } else if(flag == 1) {
+                    scope_char_array[array_name].push_back(std::stoi(tokens[i]));
+                }
             } else if(tokens[i][0] == '\'' && tokens[i][tokens[i].size() - 1] == '\'') {
                 tokens[i].pop_back();
                 tokens[i] = tokens[i].substr(1, tokens[i].size() - 1);
 
                 if(tokens[i].size() == 1 && tokens[i][0] != '}') {
                     char val = tokens[i][0];
-                    char_array[array_name].push_back(val);
+                    if(flag == 0) {
+                        char_array[array_name].push_back(val);
+                    } else if(flag == 1) {
+                        scope_char_array[array_name].push_back(val);
+                    }
                 } else {
                     throw std::runtime_error("error: invalid conversion");
                 }
             } else {
-                char_array[array_name].push_back(0);
+                if(flag == 0) {
+                    char_array[array_name].push_back(0);
+                } else if(flag == 1) {
+                    scope_char_array[array_name].push_back(0);
+                }
             }
         }
     } else if(tokens.size() == 2) {
-        char_array[extract_string_before_bracket(tokens[1])];
+        if(flag == 0) {
+            char_array[extract_string_before_bracket(tokens[1])];
+        } else if(flag == 1) {
+            scope_char_array[extract_string_before_bracket(tokens[1])];
+        }
     } else {
         throw std::runtime_error(" ");
     }
 }
 
-void Parser::float_array_declaration(std::vector<std::string>& tokens) {
+void Parser::float_array_declaration(std::vector<std::string>& tokens, bool flag) {
     std::string size = extract_content_in_brackets(tokens[1]);
     int value = 0;
     std::string array_name = extract_string_before_bracket(tokens[1]);
@@ -238,27 +266,39 @@ void Parser::float_array_declaration(std::vector<std::string>& tokens) {
             }
 
             if(is_number(tokens[i])) {
-                float_array[array_name].push_back(std::stof(tokens[i]));
+                if(flag == 0) {
+                    float_array[array_name].push_back(std::stof(tokens[i]));
+                } else if(flag == 1) {
+                    scope_float_array[array_name].push_back(std::stof(tokens[i]));
+                }
             } else if(tokens[i][0] == '\'' && tokens[i][tokens[i].size() - 1] == '\'') {
                 tokens[i].pop_back();
                 tokens[i] = tokens[i].substr(1, tokens[i].size() - 1);
 
                 if(tokens[i].size() == 1 && tokens[i][0] != '}') {
                     int val = tokens[i][0];
-                    float_array[array_name].push_back(val);
+                    if(flag == 0) {
+                        float_array[array_name].push_back(val);
+                    } else if(flag == 1) {
+                        scope_float_array[array_name].push_back(val);
+                    }
                 } else {
                     throw std::runtime_error("error: invalid conversion");
                 }
             }
         }
     } else if(tokens.size() == 2) {
-        float_array[extract_string_before_bracket(tokens[1])];
+        if(flag == 0) {
+            float_array[extract_string_before_bracket(tokens[1])];
+        } else if(flag == 1) {
+            scope_float_array[extract_string_before_bracket(tokens[1])];
+        }
     } else {
         throw std::runtime_error(" ");
     }
 }
 
-void Parser::double_array_declaration(std::vector<std::string>& tokens) {
+void Parser::double_array_declaration(std::vector<std::string>& tokens, bool flag) {
     std::string size = extract_content_in_brackets(tokens[1]);
     int value = 0;
     std::string array_name = extract_string_before_bracket(tokens[1]);
@@ -295,29 +335,41 @@ void Parser::double_array_declaration(std::vector<std::string>& tokens) {
             }
 
             if(is_number(tokens[i])) {
-                double_array[array_name].push_back(std::stod(tokens[i]));
+                if(flag == 0) {
+                    double_array[array_name].push_back(std::stod(tokens[i]));
+                } else if(flag == 1) {
+                    scope_double_array[array_name].push_back(std::stod(tokens[i]));
+                }
             } else if(tokens[i][0] == '\'' && tokens[i][tokens[i].size() - 1] == '\'') {
                 tokens[i].pop_back();
                 tokens[i] = tokens[i].substr(1, tokens[i].size() - 1);
 
                 if(tokens[i].size() == 1 && tokens[i][0] != '}') {
                     int val = tokens[i][0];
-                    double_array[array_name].push_back(val);
+                    if(flag == 0) {
+                        double_array[array_name].push_back(val);
+                    } else if(flag == 1) {
+                        scope_double_array[array_name].push_back(val);
+                    }
                 } else {
                     throw std::runtime_error("error: invalid conversion");
                 }
             }
         }
     } else if(tokens.size() == 2) {
-        double_array[extract_string_before_bracket(tokens[1])];
+        if(flag == 0) {
+            double_array[extract_string_before_bracket(tokens[1])];
+        } else if(flag == 1) {
+            scope_double_array[extract_string_before_bracket(tokens[1])];
+        }
     } else {
         throw std::runtime_error(" ");
     }
 }
 
-void Parser::bool_array_declaration(std::vector<std::string>& tokens) {
+void Parser::bool_array_declaration(std::vector<std::string>& tokens, bool flag) {
     std::string size = extract_content_in_brackets(tokens[1]);
-    int value = 0;
+    // int value = 0;
     std::string array_name = extract_string_before_bracket(tokens[1]);
     
     name_verification(array_name);
@@ -326,41 +378,54 @@ void Parser::bool_array_declaration(std::vector<std::string>& tokens) {
         throw std::runtime_error("error: storage size of '" + array_name + "' isn't known");
     }
 
-    bool is_num = is_number(size);
+    // bool is_num = is_number(size);
 
-    if(!is_num) {
-        if(int_variables.find(size) != int_variables.end()) {
-            value = int_variables[size];
-        } else if(char_variables.find(size) != char_variables.end()) {
-            value = char_variables[size];
-        } else if(float_variables.find(size) != float_variables.end()) {
-            value = float_variables[size];
-        } else if(double_variables.find(size) != double_variables.end()) {
-            value = double_variables[size];
-        } else if(bool_variables.find(size) != bool_variables.end()) {
-            value = bool_variables[size];
-        } else {
-            throw std::runtime_error("'" + size + "' was not declared in this scope");
-        }
-    }
+    // if(!is_num) {
+    //     if(int_variables.find(size) != int_variables.end()) {
+    //         value = int_variables[size];
+    //     } else if(char_variables.find(size) != char_variables.end()) {
+    //         value = char_variables[size];
+    //     } else if(float_variables.find(size) != float_variables.end()) {
+    //         value = float_variables[size];
+    //     } else if(double_variables.find(size) != double_variables.end()) {
+    //         value = double_variables[size];
+    //     } else if(bool_variables.find(size) != bool_variables.end()) {
+    //         value = bool_variables[size];
+    //     } else {
+    //         throw std::runtime_error("'" + size + "' was not declared in this scope");
+    //     }
+    // }
 
     if(tokens.size() >= 4 && tokens[2] == "=" && tokens[3] == "{" && tokens[tokens.size() - 2] == "}") {
-        for(int i = 4; i < tokens.size() - 2; ++i) {
+        size_t size = tokens.size();
+        for(int i = 4; i < size - 2; ++i) {
             if(tokens[i][tokens[i].size() - 1] == ',') {
                 tokens[i].pop_back();
             }
 
             // Check for explicit 0/1 or false/true values
             if (tokens[i] == "0" || tokens[i] == "false") {
-                bool_array[array_name].push_back(false);
+                if(flag == 0) {
+                    bool_array[array_name].push_back(false);
+                } else if(flag == 1) {
+                    scope_bool_array[array_name].push_back(false);
+                }
             } else if (tokens[i] == "1" || tokens[i] == "true") {
-                bool_array[array_name].push_back(true);
+                if(flag == 0) {
+                    bool_array[array_name].push_back(true);
+                } else if(flag == 1) {
+                    scope_bool_array[array_name].push_back(true);
+                }
             } else {
                 throw std::runtime_error("error: invalid boolean value '" + tokens[i] + "'");
             }
         }
     } else if(tokens.size() == 2) {
-        bool_array[extract_string_before_bracket(tokens[1])];
+        if(flag == 0) {
+            bool_array[extract_string_before_bracket(tokens[1])];
+        } else if(flag == 1) {
+            scope_bool_array[extract_string_before_bracket(tokens[1])];
+        }
     } else {
         throw std::runtime_error(" ");
     }

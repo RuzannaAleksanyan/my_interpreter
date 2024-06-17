@@ -7,7 +7,7 @@
 // while kisat
 // fixed bug!
 // char float_arr[x] = { '2', 'c', 3, 4 } ;
-
+// if-y ev while-y nerdrvac chen karox linel der!
 int main() {
     std::string filename = "file.txt";
     Parser parser(filename);
@@ -16,6 +16,8 @@ int main() {
 
     parser.parse();
 
+    parser.print_scope_int();
+    
     // parser.print_include();
     // parser.print_int();
     // parser.print_char();
